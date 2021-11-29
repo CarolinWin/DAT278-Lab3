@@ -111,26 +111,29 @@ void Game() {
   switch (GameState.mode) {
   case SCORE:
     snprintf(display, 10, "%d Pts", GameState.score);
-    IDLE();
+    //IDLE();
     GameState.countdown--;
     break;
 
   case MESSAGE:
     snprintf(display, 10, "%s", GameState.message);
-    IDLE();
+    // IDLE();
     GameState.countdown--;
     break;
 
   case PLAY:{
     int btn = check_button();
-    if (btn == 1) GameState.player_pos--;
-    if (btn == 2) GameState.player_pos++;
-    if (GameState.player_pos < 0) { GameState.player_pos = 0; GameState.oumpf++; }
-    if (GameState.player_pos > 6) GameState.player_pos = 6;
+    if (btn == 1){
+    	if (GameState.player_pos <= 1) { GameState.player_pos = 0; GameState.oumpf++; }
+    	else GameState.player_pos--;
+    }
+
+    if (btn == 2 && GameState.player_pos < 6) GameState.player_pos++;
+
     display[GameState.target_pos] = 'X';
     display[GameState.player_pos] = GameState.player;
 
-    IDLE();
+    //IDLE();
 
     if (GameState.oumpf >= 10) {
       GameState.mode = EGG;
@@ -164,6 +167,6 @@ void Game() {
 
   nextGameState();
 
-  IDLE();
+  //IDLE();
   SegmentLCD_Write(display);
 }

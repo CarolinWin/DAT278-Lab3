@@ -24,10 +24,12 @@ volatile unsigned int sysTicks;
 // Call this every now and then, because some things have to
 // run very often.
 void IDLE() {
+  static int a = 0;
   // HACK: If we take too long before flipping the LEDs, the intensity illusion
   // is broken. As long as IDLE() gets called often enough, it should be fine.
   // It's fine. Don't worry about it.
-  PWMLed();
+  a = (a + 1) % 10000;
+  if (a == 0) PWMLed();
 
   // Don't miss button presses just because it took long to poll them again
   Buttons();
