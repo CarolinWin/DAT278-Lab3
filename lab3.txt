@@ -1,0 +1,19 @@
+baseline:
+30s / 53.05 mW / 16.65 mA / 442.09 µWh
+a: efficient delays:
+30s / 52.66 mW / 16.53 mA / 438.87 µWh
+b: changed optimization flag to O3:
+30s / 50.57 mW / 15.85 mA / 421.44 µWh
+c: changed clock divider to 8 (and all optimizations above):
+30s / 19.37 mW /  5.96 mA / 161.41 µWh
+the clock divider 128 seemed to meet our breaking point where the display didn't show anything
+d: clock divider to 64 and co.
+30s / 11.93 mW / 3.66 mA / 99.40 µWh
+e: Removed a couple of IDLE()'s
+30s / 11.89 mW / 3.65 mA / 99.06 µWh
+f: Flip the LEDs 1/10000 of the time
+30s / 11.69 mW / 3.58 mA / 97.40 µWh
+g: Make conditionals determining movement more efficient:
+30s / 11.66 mW / 3.58 mA / 97.17 µWh
+h: Made more conditionals better (the target position is only checked when a button has been pressed)
+30s / 11.47 mW / 3.52 mA / 95.57 µWh
