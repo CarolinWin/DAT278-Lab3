@@ -31,7 +31,7 @@ static void setupCMU(void)
 
   // Gotta go fast
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
-  CMU_ClockDivSet(cmuClock_CORE, cmuClkDiv_1);
+  CMU_ClockDivSet(cmuClock_CORE, cmuClkDiv_64);
 
   CMU_OscillatorEnable(cmuOsc_AUXHFRCO, true, true);
   CMU_OscillatorEnable(cmuOsc_HFXO, true, true);
