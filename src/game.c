@@ -105,68 +105,66 @@ void nextGameState() {
 // Call now and then, updates game state and the display
 // Sometimes this is playing, sometimes it is just showing a message.
 void Game() {
-  // The string shown on the main part of the LCD
-  char display[10] = "         ";
+	// The string shown on the main part of the LCD
+	char display[10] = "         ";
 
-  switch (GameState.mode) {
-  case SCORE:
-    snprintf(display, 10, "%d Pts", GameState.score);
-    //IDLE();
-    GameState.countdown--;
-    break;
+	switch (GameState.mode) {
+	case SCORE:
+		snprintf(display, 10, "%d Pts", GameState.score);
+		//IDLE();
+		GameState.countdown--;
+		break;
 
-  case MESSAGE:
-    snprintf(display, 10, "%s", GameState.message);
-    // IDLE();
-    GameState.countdown--;
-    break;
+	case MESSAGE:
+		snprintf(display, 10, "%s", GameState.message);
+		// IDLE();
+		GameState.countdown--;
+		break;
 
-  case PLAY:{
-    int btn = check_button();
-    if (btn == 1){
-    	if (GameState.player_pos <= 1) { GameState.player_pos = 0; GameState.oumpf++; }
-    	else GameState.player_pos--;
-    }
+	case PLAY:{
+		int btn = check_button();
+		if (btn == 1) {
+			if (GameState.player_pos <= 1) {
+				GameState.player_pos = 0; GameState.oumpf++;
+				if (GameState.oumpf >= 10) {
+					GameState.mode = EGG;
+					GameState.countdown = 10;
+				}
+			}
+			else GameState.player_pos--;
+		}
 
-    if (btn == 2 && GameState.player_pos < 6) GameState.player_pos++;
+		if (btn == 2 && GameState.player_pos < 6) GameState.player_pos++;
 
-    display[GameState.target_pos] = 'X';
-    display[GameState.player_pos] = GameState.player;
+		if (btn > 0 && GameState.player_pos == GameState.target_pos) {
+			GameState.score += GameState.reward;
 
-    //IDLE();
+			moveTarget();
 
-    if (GameState.oumpf >= 10) {
-      GameState.mode = EGG;
-      GameState.countdown = 10;
-    }
+			GameState.message = "BRILLANT";
+			GameState.mode = MESSAGE;
+			GameState.countdown = 10;
+		}
 
-    if (GameState.player_pos == GameState.target_pos) {
-      GameState.score += GameState.reward;
+		display[GameState.target_pos] = 'X';
+		display[GameState.player_pos] = GameState.player;
+	}
+	break;
 
-      moveTarget();
+	case EGG:
+		GameState.oumpf = 0;
+		GameState.message = "HACKER";
+		GameState.mode = MESSAGE;
+		GameState.score += 1336;
+		GameState.player = 'O';
+		GameState.countdown = 10;
+		break;
+	default:
+		GameState.mode = PLAY;
+	}
 
-      GameState.message = "BRILLANT";
-      GameState.mode = MESSAGE;
-      GameState.countdown = 10;
-    }
+	nextGameState();
 
-  }
-    break;
-
-  case EGG:
-    GameState.oumpf = 0;
-    GameState.message = "HACKER";
-    GameState.mode = MESSAGE;
-    GameState.score += 1336;
-    GameState.player = 'O';
-    GameState.countdown = 10;
-    break;
-  default:
-    GameState.mode = PLAY;
-  }
-
-  nextGameState();
-
-  //IDLE();
-  SegmentLCD_Write(display);
+	//IDLE();
+	SegmentLCD_Write(display);
 }
